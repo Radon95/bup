@@ -216,7 +216,6 @@ var _settings_textfields = [
 	'umpire_name',
 	'service_judge_name',
 	'court_id',
-	'court_selection_type',
 	'court_description',
 	'refmode_client_ws_url',
 	'refmode_referee_ws_url',
@@ -302,6 +301,8 @@ function update(s) {
 		var $select = $('.settings [name="' + name + '"]');
 		$select.val(s.settings[name]);
 	});
+
+	$('.settings input[name="court_selection_type"][value="' + s.settings.court_selection_type + '"]').prop('checked', true);
 
 	update_court(s);
 

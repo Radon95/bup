@@ -25,6 +25,7 @@ var i18n_en = {
 'fullscreen:no': 'Normal screen',
 'timer:restart': 'Restart timer',
 
+'court:Court': 'Court',
 'court:left': 'left',
 'court:right': 'right',
 'court:referee': 'Changes will not be transmitted',
@@ -54,6 +55,7 @@ var i18n_en = {
 'network:error:status': '(State is {status})',
 'network:Matches': 'Matches',
 'network:Matches on court': 'Matches on court {court}',
+'network:Matches of umpire': 'Matches of umpire {umpire}',
 'network:restart match': 'Restart match at 0-0',
 'network:resume match': 'Resume match at {score}',
 'network:in progress': 'Match {match} has already been started',
@@ -240,6 +242,7 @@ var i18n_en = {
 'settings:Court Description.placeholder': 'e.g. right',
 'settings:Court Number': 'Number',
 'settings:Select Court': 'Court:',
+'settings:Select Umpire': 'Umpire:',
 'settings:Umpire': 'Umpire',
 'settings:Service judge': 'Service judge',
 'settings:Language': 'Language',

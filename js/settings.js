@@ -7,6 +7,8 @@ var default_settings = {
 	umpire_name: '',
 	service_judge_name: '',
 	court_id: '',
+	umpire_id: '',
+	court_selection_type: 'court',
 	court_description: '',
 	network_timeout: 10000,
 	network_update_interval: 10000,
@@ -214,6 +216,7 @@ var _settings_textfields = [
 	'umpire_name',
 	'service_judge_name',
 	'court_id',
+	'court_selection_type',
 	'court_description',
 	'refmode_client_ws_url',
 	'refmode_referee_ws_url',
@@ -255,6 +258,8 @@ var _settings_selects = [
 	'click_mode',
 	'displaymode_court_id',
 	'displaymode_style',
+	'umpire_id',
+	'umpire_select',
 	'language',
 	'wakelock',
 	'dads_mode',
@@ -270,6 +275,11 @@ function update_court_settings(s) {
 	}
 	uiu.$visible_qs('.settings_court_manual', manual);
 	uiu.$visible_qs('.settings_court_automatic', automatic);
+	if (automatic) {
+		var cst = s.settings.court_selection_type;
+		uiu.$visible_qs('.settings_court_select_container', cst === 'court');
+		uiu.$visible_qs('.settings_umpire_select_container', cst === 'umpire');
+	}
 }
 
 function update(s) {
@@ -349,6 +359,10 @@ function on_change(s, name) {
 	case 'negative_timers':
 		render.ui_render(s);
 		break;
+	case 'court_selection_type':
+		update_court_settings(s);
+		network.resync();
+		break;
 	case 'shuttle_counter':
 		render.shuttle_counter(s);
 		break;
@@ -421,6 +435,11 @@ function ui_init(s) {
 		hide();
 		control.set_current(s);
 		render.show();
+	});
+
+	$('.settings input[name="court_selection_type"]').on('change', function() {
+		var new_val = $('.settings input[name="court_selection_type"]:checked').val();
+		change_setting(s, 'court_selection_type', new_val);
 	});
 
 	_settings_checkboxes.forEach(function(name) {

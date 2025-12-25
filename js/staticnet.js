@@ -115,6 +115,26 @@ function courts(s) {
 	}];
 }
 
+function umpires(s) {
+	if (!s.event || !s.event.matches) {
+		return [];
+	}
+
+	var umpire_names = {};
+	s.event.matches.forEach(function(m) {
+		if (m.setup && m.setup.umpire_name) {
+			umpire_names[m.setup.umpire_name] = true;
+		}
+	});
+
+	return Object.keys(umpire_names).sort().map(function(name) {
+		return {
+			id: name,
+			description: name,
+		};
+	});
+}
+
 function editable(s) {
 	return s.event.editable !== false;
 }
@@ -190,6 +210,7 @@ return {
 	list_matches: list_matches,
 	list_all_players: list_all_players,
 	courts: courts,
+	umpires: umpires,
 	sync: sync,
 	service_name: service_name,
 	staticnet_message: staticnet_message,

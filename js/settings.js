@@ -276,13 +276,23 @@ function update_court_settings(s) {
 	uiu.$visible_qs('.settings_court_manual', manual);
 	uiu.$visible_qs('.settings_court_automatic', automatic);
 	if (automatic) {
-		var show_umpire_sel = s.settings.show_umpire_selection;
-		uiu.$visible_qs('.settings_type_select', show_umpire_sel);
+		var show_umpire_sel_config = s.settings.show_umpire_selection;
+		uiu.$visible_qs('.settings_type_select', show_umpire_sel_config);
 
 		var cst = s.settings.court_selection_type;
-		var show_court = !show_umpire_sel || (cst === 'court');
-		uiu.$visible_qs('.settings_court_select_container', show_court);
-		uiu.$visible_qs('.settings_umpire_select_container', show_umpire_sel && (cst === 'umpire'));
+		var show_court_container;
+		var show_umpire_container;
+
+		if (show_umpire_sel_config) {
+			show_court_container = (cst === 'court');
+			show_umpire_container = (cst === 'umpire');
+		} else {
+			show_court_container = (cst === 'court');
+			show_umpire_container = false;
+		}
+
+		uiu.$visible_qs('.settings_court_select_container', show_court_container);
+		uiu.$visible_qs('.settings_umpire_select_container', show_umpire_container);
 	}
 }
 

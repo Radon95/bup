@@ -9,6 +9,7 @@ var default_settings = {
 	court_id: '',
 	umpire_id: '',
 	court_selection_type: 'court',
+	show_umpire_selection: false,
 	court_description: '',
 	network_timeout: 10000,
 	network_update_interval: 10000,
@@ -275,9 +276,13 @@ function update_court_settings(s) {
 	uiu.$visible_qs('.settings_court_manual', manual);
 	uiu.$visible_qs('.settings_court_automatic', automatic);
 	if (automatic) {
+		var show_umpire_sel = s.settings.show_umpire_selection;
+		uiu.$visible_qs('.settings_type_select', show_umpire_sel);
+
 		var cst = s.settings.court_selection_type;
-		uiu.$visible_qs('.settings_court_select_container', cst === 'court');
-		uiu.$visible_qs('.settings_umpire_select_container', cst === 'umpire');
+		var show_court = !show_umpire_sel || (cst === 'court');
+		uiu.$visible_qs('.settings_court_select_container', show_court);
+		uiu.$visible_qs('.settings_umpire_select_container', show_umpire_sel && (cst === 'umpire'));
 	}
 }
 

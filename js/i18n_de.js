@@ -25,6 +25,7 @@ var i18n_de = {
 'fullscreen:no': 'Normalbildmodus',
 'timer:restart': 'Stoppuhr neu starten',
 
+'court:Court': 'Feld',
 'court:left': 'links',
 'court:right': 'rechts',
 'court:referee': 'Änderungen werden nicht übertragen',
@@ -54,6 +55,7 @@ var i18n_de = {
 'network:error:status': '(Status ist {status})',
 'network:Matches': 'Spiele',
 'network:Matches on court': 'Spiele auf Feld {court}',
+'network:Matches of umpire': 'Spiele von {umpire}',
 'network:restart match': 'Spiel bei 0-0 neu starten',
 'network:resume match': 'Spiel bei {score} fortsetzen',
 'network:in progress': 'Das Spiel {match} wurde bereits angefangen',
@@ -241,6 +243,7 @@ var i18n_de = {
 'settings:Court Description.placeholder': 'z.B. rechts',
 'settings:Court Number': 'Nummer',
 'settings:Select Court': 'Feld:',
+'settings:Select Umpire': 'Schiedsrichter:',
 'settings:Umpire': 'Schiedsrichter',
 'settings:Service judge': 'Aufschlagrichter',
 'settings:Language': 'Sprache',

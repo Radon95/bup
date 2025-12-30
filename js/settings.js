@@ -7,6 +7,9 @@ var default_settings = {
 	umpire_name: '',
 	service_judge_name: '',
 	court_id: '',
+	umpire_id: '',
+	court_selection_type: 'court',
+	show_umpire_selection: false,
 	court_description: '',
 	network_timeout: 10000,
 	network_update_interval: 10000,
@@ -255,6 +258,8 @@ var _settings_selects = [
 	'click_mode',
 	'displaymode_court_id',
 	'displaymode_style',
+	'umpire_id',
+	'umpire_select',
 	'language',
 	'wakelock',
 	'dads_mode',
@@ -270,6 +275,25 @@ function update_court_settings(s) {
 	}
 	uiu.$visible_qs('.settings_court_manual', manual);
 	uiu.$visible_qs('.settings_court_automatic', automatic);
+	if (automatic) {
+		var show_umpire_sel_config = s.settings.show_umpire_selection;
+		uiu.$visible_qs('.settings_type_select', show_umpire_sel_config);
+
+		var cst = s.settings.court_selection_type;
+		var show_court_container;
+		var show_umpire_container;
+
+		if (show_umpire_sel_config) {
+			show_court_container = (cst === 'court');
+			show_umpire_container = (cst === 'umpire');
+		} else {
+			show_court_container = (cst === 'court');
+			show_umpire_container = false;
+		}
+
+		uiu.$visible_qs('.settings_court_select_container', show_court_container);
+		uiu.$visible_qs('.settings_umpire_select_container', show_umpire_container);
+	}
 }
 
 function update(s) {
@@ -292,6 +316,8 @@ function update(s) {
 		var $select = $('.settings [name="' + name + '"]');
 		$select.val(s.settings[name]);
 	});
+
+	$('.settings input[name="court_selection_type"][value="' + s.settings.court_selection_type + '"]').prop('checked', true);
 
 	update_court(s);
 
@@ -348,6 +374,10 @@ function on_change(s, name) {
 	case 'show_announcements':
 	case 'negative_timers':
 		render.ui_render(s);
+		break;
+	case 'court_selection_type':
+		update_court_settings(s);
+		network.resync();
 		break;
 	case 'shuttle_counter':
 		render.shuttle_counter(s);
@@ -421,6 +451,11 @@ function ui_init(s) {
 		hide();
 		control.set_current(s);
 		render.show();
+	});
+
+	$('.settings input[name="court_selection_type"]').on('change', function() {
+		var new_val = $('.settings input[name="court_selection_type"]:checked').val();
+		change_setting(s, 'court_selection_type', new_val);
 	});
 
 	_settings_checkboxes.forEach(function(name) {

@@ -26,6 +26,7 @@ var i18n_frch = {
 'fullscreen:no': 'écran normal',
 'timer:restart': 'Redémarrer la minuterie',
 
+'court:Court': 'Court',
 'court:left': 'gauche',
 'court:right': 'droite',
 'court:referee': 'juge-arbitre',
@@ -52,6 +53,7 @@ var i18n_frch = {
 'network:error:unconfigured': 'Connexion réseau non configurée (mode de démonstration? Mettre #nlademo dans l\'URL)',
 'network:Matches': 'Jeux',
 'network:Matches on court': 'Jeux sur {court}',
+'network:Matches of umpire': 'Jeux de {umpire}',
 'network:restart match': 'Redémarrer le jeu à 0-0',
 'network:resume match': 'Reprendre le jeu à {score}',
 'network:in progress': 'Le jeu {match} a déjà été lancé',
@@ -232,6 +234,7 @@ var i18n_frch = {
 'settings:Court Description.placeholder': 'par example droite',
 'settings:Court Number': 'Nombre',
 'settings:Select Court': 'Court:',
+'settings:Select Umpire': 'Arbitre:',
 'settings:Umpire': 'Arbitre',
 'settings:Service judge': 'Juge de service',
 'settings:Language': 'Langue',

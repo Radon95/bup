@@ -353,7 +353,18 @@
 <div data-bup-modes="display" class="settings_d_scale"><label><span data-i18n="displaymode:scale"></span> <input name="d_scale" type="number" min="20" max="500" /></label></div>
 
 <div class="settings_court_manual"><label><span data-i18n="settings:Court Description"></span> <input type="text" name="court_description" size="8" data-i18n-placeholder="settings:Court Description.placeholder" /></label> <span data-i18n="settings:Court Number"></span> <label> <input type="number" name="court_id" min="1" /></label></div>
-<div class="settings_court_automatic default-invisible"><label data-bup-modes="umpire" data-bup-styles="clean complete"><span data-i18n="settings:Select Court"></span> <select name="court_select" size="1"></select></label></div>
+<div class="settings_court_automatic default-invisible" data-bup-modes="umpire" data-bup-styles="clean complete">
+	<fieldset class="settings_type_select">
+		<label><input type="radio" name="court_selection_type" value="court" checked="checked"><span data-i18n="settings:Select Court"></span></label>
+		<label><input type="radio" name="court_selection_type" value="umpire"><span data-i18n="settings:Select Umpire"></span></label>
+	</fieldset>
+	<div class="settings_court_select_container">
+		<label><span data-i18n="settings:Select Court"></span> <select name="court_select" size="1"></select></label>
+	</div>
+	<div class="settings_umpire_select_container">
+		<label><span data-i18n="settings:Select Umpire"></span> <select name="umpire_select" size="1"></select></label>
+	</div>
+</div>
 
 <div class="default-invisible" data-bup-modes="umpire" data-bup-styles="clean" style="height: 1em;"></div>
 

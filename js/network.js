@@ -49,6 +49,16 @@ function get_presses(match) {
 
 // Returns a list of {id, description} or null (if no restrictions).
 // State s is for i18n
+function umpires(s) {
+	var netw = get_netw();
+	if (!netw || !netw.umpires) {
+		return null;
+	}
+	return netw.umpires(s);
+}
+
+// Returns a list of {id, description} or null (if no restrictions).
+// State s is for i18n
 function courts(s) {
 	var netw = get_netw();
 	if (! netw) {
@@ -114,6 +124,39 @@ function calc_team0_left(match) {
 		return s.game.team1_left;
 	}
 	return null;
+}
+
+function _set_umpire(s, u) {
+	s.settings.umpire_id = u.id;
+	settings.store(s);
+	settings.update(s);
+	resync();
+}
+
+function _umpire_by_id(all_umpires, umpire_id) {
+	return utils.find(all_umpires, function(u) {
+		return u.id === umpire_id;
+	});
+}
+
+function ui_init_umpire(s) {
+	var all_umpires = umpires(s);
+	if (!all_umpires) {
+		return;
+	}
+
+	var $select = $('.settings select[name="umpire_select"]');
+	$select.empty();
+	all_umpires.forEach(function(u) {
+		var $option = $('<option>');
+		$option.text(u.description);
+		$option.attr('value', u.id);
+		$select.append($option);
+	});
+	$select.val(s.settings.umpire_id);
+	$select.on('change', function() {
+		_set_umpire(s, {id: $select.val()});
+	});
 }
 
 function calc_resume_presses(s, match) {
@@ -247,7 +290,12 @@ function ui_render_matchlist(s, event) {
 
 	var top_label = event.event_name;
 	if (!top_label) {
-		if (s.settings && s.settings.court_id && s.settings.court_id !== 'referee') {
+		if (s.settings.court_selection_type === 'umpire') {
+			top_label = s._(
+				'network:Matches of umpire',
+				{umpire: s.settings.umpire_id}
+			);
+		} else if (s.settings && s.settings.court_id && s.settings.court_id !== 'referee') {
 			top_label = s._(
 				'network:Matches on court',
 				{court: _short_court_id(s.settings.court_id)});
@@ -257,7 +305,13 @@ function ui_render_matchlist(s, event) {
 	}
 	uiu.text_qs('.setup_network_event', top_label);
 
-	event.matches.forEach(function(match) {
+	var matches = event.matches;
+	if (s.settings.court_selection_type === 'umpire') {
+		matches = matches.filter(function(m) {
+			return m.setup && (m.setup.umpire_name === s.settings.umpire_id);
+		});
+	}
+	matches.forEach(function(match) {
 		var btn = uiu.el(container, 'button', {
 			'class': 'setup_network_match',
 		});
@@ -294,15 +348,22 @@ function ui_render_matchlist(s, event) {
 			'class': 'setup_network_match_away_players',
 		}, _players_str(match.setup.teams[1]));
 
-		var umpire_name = match.setup.umpire_name;
-		if (umpire_name) {
-			if (match.setup.service_judge_name) {
-				umpire_name += ' + ' + match.setup.service_judge_name;
+		var detail_text = '';
+		if (s.settings.court_selection_type === 'court') {
+			detail_text = match.setup.umpire_name;
+			if (detail_text && match.setup.service_judge_name) {
+				detail_text += ' + ' + match.setup.service_judge_name;
 			}
+		} else {
+			if (match.setup.court_id) {
+				detail_text = s._('court:Court') + ' ' + match.setup.court_id;
+			}
+		}
 
+		if (detail_text) {
 			uiu.el(btn, 'span', {
 				'class': 'setup_network_umpire_name',
-			}, umpire_name);
+			}, detail_text);
 		}
 		var score_text = _score_text(match.network_score);
 		uiu.el(btn, 'span', {
@@ -694,6 +755,7 @@ function ui_init(s, hash_query) {
 
 		fetch_courts(s, function() {
 			ui_init_court(s, hash_query);
+			ui_init_umpire(s);
 		});
 	}
 }
@@ -827,6 +889,7 @@ return {
 	calc_team0_left: calc_team0_left,
 	court_label: court_label,
 	courts: courts,
+	umpires: umpires,
 	enter_match: enter_match,
 	errstate: errstate,
 	get_presses: get_presses,

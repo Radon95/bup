@@ -1,7 +1,7 @@
 Badminton Umpire Panel
 =======
 
-## Demos
+## Demos of original bup from git@github.com:Radon95/bup.git:
 
 - [Quick demo: Start a match](https://aufschlagwechsel.de/bup/#demo)
 - [German Bundesliga](https://aufschlagwechsel.de/bup/#bldemo)
@@ -34,10 +34,3 @@ You can then run the tests with `make test`, and build a distribution file with 
 
 bup runs on all modern browsers, as well as Edge 12+, IE9+, Smart TVs, and Safari. In short: Any device sold in the last decade should work.
 
-## Download
-
-You can also download the current build as a zip file at [https://aufschlagwechsel.de/bup.zip](https://aufschlagwechsel.de/bup.zip) .
-
-## Support & Questions
-
-If you have any suggestions, questions, or bug reports, either [create an issue](https://github.com/phihag/bup/issues/new) or contact me at [phihag@phihag.de](mailto:phihag@phihag.de).

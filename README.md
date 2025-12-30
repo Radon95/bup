@@ -1,7 +1,7 @@
 Badminton Umpire Panel
 =======
 
-## Demos of original bup from git@github.com:Radon95/bup.git:
+## Demos of original bup from git@github.com:phihag/bup.git:
 
 - [Quick demo: Start a match](https://aufschlagwechsel.de/bup/#demo)
 - [German Bundesliga](https://aufschlagwechsel.de/bup/#bldemo)

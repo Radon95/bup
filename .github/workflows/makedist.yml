@@ -34,3 +34,4 @@ jobs:
         git config user.name $GIT_NAME
         git add -f dist/bup.zip
         git commit -m 'New release'        
+        git push --set-upstream origin release

@@ -128,6 +128,7 @@ function calc_team0_left(match) {
 
 function _set_umpire(s, u) {
 	s.settings.umpire_id = u.id;
+	s.settings.umpire_name = u.description;
 	settings.store(s);
 	settings.update(s);
 	resync();
@@ -155,7 +156,11 @@ function ui_init_umpire(s) {
 	});
 	$select.val(s.settings.umpire_id);
 	$select.on('change', function() {
-		_set_umpire(s, {id: $select.val()});
+		var u_id = $select.val();
+		var u = _umpire_by_id(all_umpires, u_id);
+		if (u) {
+			_set_umpire(s, u);
+		}
 	});
 }
 

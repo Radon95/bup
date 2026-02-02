@@ -112,19 +112,19 @@ function send_press(s) {
 }
 
 function list_matches(s, cb) {
-	var court_id = '';
-	if ((s.ui && s.ui.displaymode_visible)) {
-		var style = s.settings.displaymode_style;
-		if (displaymode.option_applies(style, 'court_id') && (style != '2court')) {
-			court_id = s.settings.displaymode_court_id;
-		}
-	} else {
-		court_id = s.settings.court_id;
-	}
-	var filter;
+	var filter = '';
 	if (s.settings.court_selection_type === 'umpire' && s.settings.umpire_id) {
 		filter = 'umpire=' + encodeURIComponent(s.settings.umpire_id);
 	} else {
+		var court_id = '';
+		if ((s.ui && s.ui.displaymode_visible)) {
+			var style = s.settings.displaymode_style;
+			if (displaymode.option_applies(style, 'court_id') && (style != '2court')) {
+				court_id = s.settings.displaymode_court_id;
+			}
+		} else {
+			court_id = s.settings.court_id;
+		}
 		filter = court_id ? ('court=' + encodeURIComponent(court_id)) : '';
 	}
 

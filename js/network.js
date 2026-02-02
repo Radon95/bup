@@ -293,7 +293,7 @@ function ui_render_matchlist(s, event) {
 		if (s.settings.court_selection_type === 'umpire') {
 			top_label = s._(
 				'network:Matches of umpire',
-				{umpire: s.settings.umpire_id}
+				{umpire: s.settings.umpire_name}
 			);
 		} else if (s.settings && s.settings.court_id && s.settings.court_id !== 'referee') {
 			top_label = s._(
@@ -308,7 +308,11 @@ function ui_render_matchlist(s, event) {
 	var matches = event.matches;
 	if (s.settings.court_selection_type === 'umpire') {
 		matches = matches.filter(function(m) {
-			return m.setup && (m.setup.umpire_name === s.settings.umpire_id);
+			return m.setup && (
+				(m.setup.umpire_id === s.settings.umpire_id) ||
+				(m.setup.umpire_name === s.settings.umpire_name) ||
+				(m.setup.umpire_name === s.settings.umpire_id)
+			);
 		});
 	}
 	matches.forEach(function(match) {
@@ -356,7 +360,7 @@ function ui_render_matchlist(s, event) {
 			}
 		} else {
 			if (match.setup.court_id) {
-				detail_text = s._('court:Court') + ' ' + match.setup.court_id;
+				detail_text = s._('court:Court') + ' ' + _short_court_id(match.setup.court_id);
 			}
 		}
 
@@ -631,8 +635,8 @@ function ui_init_court(s, hash_query) {
 
 function fetch_courts(s, success_callback) {
 	var netw = get_netw();
-	if (!netw.fetch_courts) {
-		return success_callback(netw.courts(s));
+	if (!netw || !netw.fetch_courts) {
+		return success_callback(courts(s));
 	}
 
 	var court_status_container = uiu.el(uiu.qs('body'), 'div', 'modal-wrapper');
@@ -663,6 +667,15 @@ function fetch_courts(s, success_callback) {
 	netw.fetch_courts(s, on_success);
 }
 
+function fetch_umpires(s, callback) {
+	var netw = get_netw();
+	if (!netw || !netw.fetch_umpires) {
+		return callback(null, umpires(s));
+	}
+
+	netw.fetch_umpires(s, callback);
+}	
+	
 function ui_init(s, hash_query) {
 	click.qs('.network_desync_image', resync);
 	click.qs('.setup_network_matches_reload', function() {
@@ -755,7 +768,9 @@ function ui_init(s, hash_query) {
 
 		fetch_courts(s, function() {
 			ui_init_court(s, hash_query);
-			ui_init_umpire(s);
+			fetch_umpires(s, function() {
+				ui_init_umpire(s);
+			});
 		});
 	}
 }
@@ -910,6 +925,7 @@ return {
 	supports_order: supports_order,
 	ui_init: ui_init,
 	ui_install_refmode_client: ui_install_refmode_client,
+	fetch_umpires: fetch_umpires,
 	ui_install_staticnet: ui_install_staticnet,
 	ui_list_matches: ui_list_matches,
 	ui_uninstall_refmode_client: ui_uninstall_refmode_client,

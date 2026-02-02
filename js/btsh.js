@@ -1,5 +1,5 @@
 'use strict';
-// BTS support (https://github.com/phihag/bts/) via HTTP & WebSocket
+// BTS support via HTTP & WebSocket
 
 function btsh(baseurl, tournament_key) {
 
@@ -122,6 +122,10 @@ function list_matches(s, cb) {
 		court_id = s.settings.court_id;
 	}
 	var filter = court_id ? ('court=' + encodeURIComponent(court_id)) : '';
+	if (!filter && s.settings.court_selection_type === 'umpire' && s.settings.umpire_id) {
+		filter = 'umpire=' + encodeURIComponent(s.settings.umpire_id);
+	}
+
 	var device_url = '&device=' + encodeURIComponent(btoa(JSON.stringify(_device_data(s))));
 
 	_request_json(s, 'btsh.list', {
@@ -187,6 +191,31 @@ function service_name() {
 function editable(/*s*/) {
 	return false;
 }
+	
+function fetch_umpires(s, callback) {
+	var device_url = '?device=' + encodeURIComponent(btoa(JSON.stringify(_device_data(s))));
+	_request_json(s, 'btsh.umpires', {
+		url: baseurl + 'h/' + encodeURIComponent(tournament_key) + '/umpires' + device_url,
+	}, function(err, response) {
+		if (err) {
+			return callback(err);
+		}
+
+		var umpires = response.umpires.map(function(u) {
+			return {
+				id: u._id,
+				description: u.name,
+			};
+		});
+		s.btsh_umpires = umpires;
+		return callback(err, umpires);
+	});
+}
+
+function umpires(s) {
+	return s.btsh_umpires;
+}
+
 
 function courts(s) {
 	return s.btsh_courts;
@@ -199,6 +228,8 @@ return {
 	sync: sync,
 	courts: courts,
 	fetch_courts: fetch_courts,
+	umpires: umpires,
+	fetch_umpires: fetch_umpires,
 	service_name: service_name,
 	editable: editable,
 	limited_ui: true,

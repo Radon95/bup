@@ -17,6 +17,7 @@ jobs:
     - name: Switch branch and merge master
       run: |
         git checkout -b release
+        git pull
         git merge master      
 
     - name: Install dependencies

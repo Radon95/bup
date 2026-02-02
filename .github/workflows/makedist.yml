@@ -33,6 +33,4 @@ jobs:
         git config user.email $GIT_EMAIL
         git config user.name $GIT_NAME
         git add -f dist/bup.zip
-        git commit -m 'New release'
-        git push
-        
+        git commit -m 'New release'        

@@ -3,9 +3,7 @@ name: Makefile CI
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
+  
 jobs:
   build:
 
@@ -14,8 +12,20 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Switch branch and merge master
+      run: |
+        git switch release
+        git merge master      
+
     - name: Install dependencies
       run: make deps
 
     - name: Generate the dist zip-file
       run: make dist
+
+    - name: Commit the changes
+      run: |
+        git add -f dist/bup.zip
+        git commit -m 'New release'
+        git push
+        

@@ -3,19 +3,36 @@ name: Makefile CI
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
+  
 jobs:
   build:
+
+    environment: Release
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
 
+    - name: Switch branch and merge master
+      run: |
+        git checkout -b release
+        git pull
+        git merge master      
+
     - name: Install dependencies
       run: make deps
 
     - name: Generate the dist zip-file
       run: make dist
+
+    - name: Commit the changes
+      env:
+        GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
+        GIT_NAME: ${{ secrets.GIT_NAME }}
+      run: |
+        git config user.email $GIT_EMAIL
+        git config user.name $GIT_NAME
+        git add -f dist/bup.zip
+        git commit -m 'New release'        
+        git push --set-upstream origin release

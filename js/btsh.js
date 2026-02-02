@@ -121,9 +121,11 @@ function list_matches(s, cb) {
 	} else {
 		court_id = s.settings.court_id;
 	}
-	var filter = court_id ? ('court=' + encodeURIComponent(court_id)) : '';
-	if (!filter && s.settings.court_selection_type === 'umpire' && s.settings.umpire_id) {
+	var filter;
+	if (s.settings.court_selection_type === 'umpire' && s.settings.umpire_id) {
 		filter = 'umpire=' + encodeURIComponent(s.settings.umpire_id);
+	} else {
+		filter = court_id ? ('court=' + encodeURIComponent(court_id)) : '';
 	}
 
 	var device_url = '&device=' + encodeURIComponent(btoa(JSON.stringify(_device_data(s))));
